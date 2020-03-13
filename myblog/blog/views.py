@@ -68,3 +68,9 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return redirect('user_login')
+
+@login_required
+def user_dashboard(request):
+	context_data = dict()
+	context_data['user_posts'] = Post.objects.filter(user=request.user).order_by('-created_at')
+	return render(request, 'user_dashboard.html', context_data)

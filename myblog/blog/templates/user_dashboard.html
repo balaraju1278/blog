@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block inner_content %}
+<div class="contianer">
+	<div class="row">
+		<div class="col-lg-7">
+			<h5>My Posts</h5>
+			{% for post in user_posts %}
+			<div class="uk-card uk-card-default">
+				<h5>{{post.title}}</h5>
+				<p>{{post.text}} - <span>{{post.created_at|date}}</span></p>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

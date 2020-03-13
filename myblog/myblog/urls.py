@@ -22,6 +22,7 @@ from blog.views import (
 	user_registration,
 	user_login,
 	user_logout,
+	user_dashboard,
 )
 
 
@@ -32,5 +33,6 @@ urlpatterns = [
     path('user_registration/', user_registration,name='user_registration'),
     path('user_login/', user_login, name='user_login'),
     path('user_logout/', user_logout, name='user_logout'),
+    path('user_dashboard/', user_dashboard, name='user_dashboard'),
     path('', home, name='home')
 ]

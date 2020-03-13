@@ -21,6 +21,7 @@
         <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
                 {% if request.user.is_authenticated %}
+                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
                 <li><a href="{% url 'user_logout' %}">Logout</a></li>
                 {% else %}
                 <li><a href="{% url 'user_login' %}">Login</a></li>
