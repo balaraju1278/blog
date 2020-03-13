@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from blog.models import Post
+from blog.models import Post,UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -44,6 +44,9 @@ def user_registration(request):
 			username=username,
 			email=email
 		)
+		new_user_profile = UserProfile.objects.create(
+			user=new_user
+		)
 		new_user.set_password(request.POST.get('password'))
 		new_user.save()
 		return redirect('user_login')
@@ -74,3 +77,17 @@ def user_dashboard(request):
 	context_data = dict()
 	context_data['user_posts'] = Post.objects.filter(user=request.user).order_by('-created_at')
 	return render(request, 'user_dashboard.html', context_data)
+
+
+@login_required
+def user_profile(request):
+	if request.method == 'POST':
+		user_profile = UserProfile.objects.get(user=request.user)
+		user_profile.first_name = request.POST.get('first_name')
+		user_profile.last_name = request.POST.get('last_name')
+		user_profile.contact_phone = request.POST.get('contact_phone')
+		user_profile.profile_pic = request.POST.get('profile_pic')
+		user_profile.about = request.POST.get('about')
+		user_profile.save()
+		return redirect('user_dashboard')
+	return render(request, 'user_profile.html')

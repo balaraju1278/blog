@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block inner_content %}
+<div class="contianer">
+	<div class="row">
+		<div class="col-lg-12 text-center uk-padding-medium">
+			<form method="post" class="uk-form">
+				{% csrf_token %}
+				<div class="uk-margin">
+					<label>First name</label>
+					<input type="text" name="first_name" class="uk-input" 
+					value="{{request.user.user_profile.first_name}}">
+				</div>
+				<div class="uk-margin">
+					<label>Last name</label>
+					<input type="text" name="last_name" class="uk-input"
+					value="{{request.user.user_profile.last_name}}">
+				</div>
+				<div class="uk-margin">
+					<label>Contact Phone</label>
+					<input type="text" name="contact_phone" class="uk-input"
+					value="{{request.user.user_profile.contact_phone}}">
+				</div>
+				<div class="uk-margin">
+					<label>About</label>
+					<textarea class="uk-textarea" name="about" value="{{request.user.user_profile.about}}"></textarea>
+				</div>
+				<div class="uk-margin">
+					<label>Profile Photo</label>
+					<input type="file" name="profile_pic" class="uk-input" >
+				</div>
+				<div class="uk-margin">
+					<button type="submit" class="uk-button uk-button-primary">Register</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

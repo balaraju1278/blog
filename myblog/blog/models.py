@@ -11,3 +11,16 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+
+class UserProfile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+	first_name = models.CharField(max_length=100,null=True,blank=True)
+	last_name = models.CharField(max_length=100, null=True, blank=True)
+	contact_phone = models.CharField(max_length=12, null=True,blank=True)
+	profile_pic = models.ImageField(upload_to='images/', null=True,blank=True)
+	about = models.TextField(null=True,blank=True)
+
+	def __str__(self):
+		return str(self.user)
