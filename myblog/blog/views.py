@@ -13,6 +13,22 @@ def home(request):
 	return render(request, 'home.html', context_data)
 
 
+def post_details(request, pk):
+	context_data = dict()
+	try:
+		post = Post.objects.get(pk=pk)
+	except Post.DoesNotExist:
+		post = None
+
+	if post is None:
+		context_data['invalid_request'] = True
+		return render(request, 'post_details.html', context_data)
+	post.views += 1
+	post.save()
+	context_data['post'] = post
+	return render(request, 'post_details.html', context_data)
+
+
 @login_required(login_url='/user_login/')
 def create_post(request):
 	if request.method == 'POST':

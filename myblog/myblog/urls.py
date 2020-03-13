@@ -18,6 +18,7 @@ from django.urls import path
 from blog.views import (
 	home,
 	create_post,
+	post_details,
 
 	user_registration,
 	user_login,
@@ -36,5 +37,6 @@ urlpatterns = [
     path('user_logout/', user_logout, name='user_logout'),
     path('user_dashboard/', user_dashboard, name='user_dashboard'),
     path('user_profile/', user_profile, name='user_profile'),
+    path('post_details/<int:pk>/', post_details, name='post_details'),
     path('', home, name='home')
 ]
