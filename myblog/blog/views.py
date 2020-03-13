@@ -19,6 +19,7 @@ def create_post(request):
 		new_post = Post.objects.create(
 			title=title,
 			text=text,
+			user=request.user,
 		)
 		return redirect('home')
 	return render(request, 'create_post.html')

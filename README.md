@@ -13,4 +13,3 @@
 * [User Registration Templates](https://github.com/balaraju1278/blog/tree/user_registration_templates) 
 * [User Login](https://github.com/balaraju1278/blog/tree/user_login)
 * [User Logout & Restrictions](https://github.com/balaraju1278/blog/tree/user_logout_and_others) 
-* [Total Code](https://maven.apache.org/) 
