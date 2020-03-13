@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from blog.models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -10,6 +11,7 @@ def home(request):
 	return render(request, 'home.html', context_data)
 
 
+@login_required(login_url='/user_login/')
 def create_post(request):
 	if request.method == 'POST':
 		title = request.POST.get('title')
@@ -60,3 +62,8 @@ def user_login(request):
 			context_data['invalid_data'] = True
 			return render(request, 'user_login.html', context_data)
 	return render(request, 'user_login.html')
+
+
+def user_logout(request):
+	logout(request)
+	return redirect('user_login')
