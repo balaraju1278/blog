@@ -2,12 +2,37 @@
 {% block inner_content %}
 <div class="contianer">
 	<div class="row">
-		{% for post in posts %}
-		<div class="col-lg-12 uk-padding-medium">
-			<h5>{{post.title}}</h5>
-			<p>{{post.text}}</p>
+		<div class="col-lg-3">
+			<div class="uk-card uk-card-default">
+			<div class="uk-margin-medium-top uk-margin-medium-left">
+				<ul class="uk-thumbnav" uk-margin>
+    				<li class="uk-active"><a href="#">
+    					<img src="https://i.ya-webdesign.com/images/user-avatar-png-7.png" width="100" alt=""></a></li>
+				</ul>
+			</div>
+			<div class="uk-margin-small-top uk-margin-medium-left">
+				<h5>{{request.user.username}}</h5>
+			</div>
+			</div>
 		</div>
+		<div class="col-lg-6 uk-padding-medium">
+		{% for post in posts %}
+			<div class="uk-card uk-card-default uk-margin-medium-top">
+				<h5>{{post.title}}</h5>
+				<p>{{post.text}}</p>
+			</div>
 		{% endfor %}
+		</div>
+		<div class="col-lg-3 uk-padding-medium">
+			<div class="uk-padding-medium">
+				Suggestions
+			</div>
+			{% for user in users %}
+				<div class="uk-margin-medium-top">
+					<a href="">{{user}}</a>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 </div>
 {% endblock %}

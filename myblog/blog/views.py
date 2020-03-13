@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 def home(request):
 	context_data = dict()
 	context_data['posts'] = Post.objects.all()
+	if request.user.is_authenticated:
+		context_data['users'] = UserProfile.objects.all()[:10]
 	return render(request, 'home.html', context_data)
 
 
