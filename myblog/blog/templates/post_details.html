@@ -25,7 +25,11 @@
 					        <p>{{post.text}}</p>
 					    </div>
 					    <div class="uk-card-footer">
-					        <a href="#" class="uk-button uk-button-text">Like</a>
+					    	{% if post_liked %}
+					        <a href="{% url 'post_dislike' post.pk %}" class="uk-button uk-button-text">Dislike</a>
+					    	{% else %}
+					        <a href="{% url 'post_like' post.pk %}" class="uk-button uk-button-text">Like</a>
+					    	{% endif %}
 					    </div>
 					</div>
 				{% endif %}

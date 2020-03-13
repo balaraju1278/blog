@@ -15,6 +15,13 @@ class Post(models.Model):
 		return self.title
 
 
+class PostLike(models.Model):
+	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
+	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
+
+	def __str__(self):
+		return '{}---{}'.format(str(self.post),str(self.user))	
+
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')

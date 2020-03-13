@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from blog.models import Post,UserProfile
+from blog.models import Post,UserProfile,PostLike
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,7 @@ def home(request):
 		context_data['users'] = UserProfile.objects.all()[:10]
 	return render(request, 'home.html', context_data)
 
-
+@login_required
 def post_details(request, pk):
 	context_data = dict()
 	try:
@@ -26,7 +26,38 @@ def post_details(request, pk):
 	post.views += 1
 	post.save()
 	context_data['post'] = post
+	check_like = PostLike.objects.filter(user=request.user, post=post).exists()
+	if check_like:
+		context_data['post_liked'] = True
 	return render(request, 'post_details.html', context_data)
+
+
+@login_required
+def post_like(request, pk):
+	context_data = dict()
+	try:
+		post = Post.objects.get(pk=pk)
+	except Post.DoesNotExist:
+		post = None
+
+	new_like = PostLike.objects.create(
+		user=request.user,
+		post=post
+	)
+	return redirect('home')
+
+
+@login_required
+def post_dislike(request, pk):
+	context_data = dict()
+	try:
+		post = Post.objects.get(pk=pk)
+	except Post.DoesNotExist:
+		post = None
+
+	post_like = PostLike.objects.get(user=request.user, post=post)
+	post_like.delete()
+	return redirect('home')
 
 
 @login_required(login_url='/user_login/')
