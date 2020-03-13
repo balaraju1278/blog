@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from blog.models import Post
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
@@ -47,4 +48,15 @@ def user_registration(request):
 
 
 def user_login(request):
+	context_data = dict()
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		try:
+			user = authenticate(username=username, password=password)
+			login(request, user)
+			return redirect('home')
+		except:
+			context_data['invalid_data'] = True
+			return render(request, 'user_login.html', context_data)
 	return render(request, 'user_login.html')
