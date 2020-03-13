@@ -23,6 +23,16 @@ class PostLike(models.Model):
 		return '{}---{}'.format(str(self.post),str(self.user))	
 
 
+class PostComment(models.Model):
+	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
+	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commented_posts')
+	comment_text = models.TextField()
+	commented_at = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.comment_text
+
+
 class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
 	first_name = models.CharField(max_length=100,null=True,blank=True)

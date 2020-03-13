@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
-from blog.models import Post,UserProfile,PostLike
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
+from blog.models import Post,UserProfile,PostLike,PostComment
 
 
 def home(request):
@@ -29,6 +30,15 @@ def post_details(request, pk):
 	check_like = PostLike.objects.filter(user=request.user, post=post).exists()
 	if check_like:
 		context_data['post_liked'] = True
+		
+	if request.method == 'POST':
+		comment_text = request.POST.get('comment_text')
+		comment = PostComment.objects.create(
+			post=post,
+			user=request.user,
+			comment_text=comment_text
+		)
+		return redirect('post_details', pk=post.id)		
 	return render(request, 'post_details.html', context_data)
 
 

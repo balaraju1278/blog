@@ -34,6 +34,7 @@
 			    <div class="uk-card-footer">
 			       <span>{{post.views}} views</span>
 			       <span>{{post.post_likes.count}} likes</span>
+			       <span>{{post.post_comments.count}} comments</span>
 			    </div>
 			    <div class="uk-card-footer">
 			        <a href="{% url 'post_details' post.pk %}" class="uk-button uk-button-text">Read more</a>
