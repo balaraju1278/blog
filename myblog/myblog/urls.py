@@ -21,6 +21,7 @@ from blog.views import (
 	post_details,
 	post_like,
 	post_dislike,
+	post_share,
 
 	user_registration,
 	user_login,
@@ -42,5 +43,7 @@ urlpatterns = [
     path('post_details/<int:pk>/', post_details, name='post_details'),
     path('post_like/<int:pk>/', post_like, name='post_like'),
     path('post_dislike/<int:pk>/', post_dislike, name='post_dislike'),
+    path('post_share/<int:pk>/', post_share, name='post_share'),
+
     path('', home, name='home'),
 ]

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from blog.models import Post,UserProfile,PostLike,PostComment
+from blog.models import Post,UserProfile,PostLike,PostComment,PostShare
 
 
 def home(request):
@@ -30,7 +30,7 @@ def post_details(request, pk):
 	check_like = PostLike.objects.filter(user=request.user, post=post).exists()
 	if check_like:
 		context_data['post_liked'] = True
-		
+
 	if request.method == 'POST':
 		comment_text = request.POST.get('comment_text')
 		comment = PostComment.objects.create(
@@ -54,7 +54,7 @@ def post_like(request, pk):
 		user=request.user,
 		post=post
 	)
-	return redirect('home')
+	return redirect('post_details', pk=post.id)
 
 
 @login_required
@@ -67,7 +67,23 @@ def post_dislike(request, pk):
 
 	post_like = PostLike.objects.get(user=request.user, post=post)
 	post_like.delete()
-	return redirect('home')
+	return redirect('post_details', pk=post.id)
+
+
+
+@login_required
+def post_share(request, pk):
+	context_data = dict()
+	try:
+		post = Post.objects.get(pk=pk)
+	except Post.DoesNotExist:
+		post = None
+
+	post_share = PostShare.objects.create(
+		post=post,
+		user=request.user
+	)
+	return redirect('post_details', pk=post.id)
 
 
 @login_required(login_url='/user_login/')

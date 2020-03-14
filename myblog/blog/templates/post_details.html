@@ -25,11 +25,18 @@
 					        <p>{{post.text}}</p>
 					    </div>
 					    <div class="uk-card-footer">
+					       <span>{{post.views}} views</span>
+					       <span>{{post.post_likes.count}} likes</span>
+					       <span>{{post.post_comments.count}} comments</span>
+					       <span>{{post.post_shares.count}} Shares</span>
+					    </div>
+					    <div class="uk-card-footer">
 					    	{% if post_liked %}
 					        <a href="{% url 'post_dislike' post.pk %}" class="uk-button uk-button-text">Dislike</a>
 					    	{% else %}
 					        <a href="{% url 'post_like' post.pk %}" class="uk-button uk-button-text">Like</a>
 					    	{% endif %}
+					    	<a href="{% url 'post_share' post.pk %}" class="uk-button uk-button-text">Reshare</a>
 					    </div>
 					</div>
 					<hr>
