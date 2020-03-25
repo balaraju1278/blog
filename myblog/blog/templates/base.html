@@ -5,7 +5,8 @@
 	<title>My Blog</title>
     <link href="{% static 'assets/css/uikit.css' %}" rel="stylesheet">
     <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
-
+    {% block extra_code %}
+    {% endblock %}
 </head>
 <body>
 <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
@@ -21,6 +22,16 @@
         <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
                 {% if request.user.is_authenticated %}
+                <li>
+                 <div>
+                    <a class="uk-navbar-toggle" uk-search-icon href="#"></a>
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
+                        <form class="uk-search uk-search-navbar uk-width-1-1" method="get">
+                            <input name="search_item" class="uk-search-input" type="search" placeholder="Search..." autofocus>
+                        </form>
+                    </div>
+                </div> 
+                </li>
                 <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
                 <li><a href="{% url 'user_logout' %}">Logout</a></li>
                 {% else %}

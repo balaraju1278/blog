@@ -27,7 +27,12 @@ from blog.views import (
 	user_login,
 	user_logout,
 	user_dashboard,
-	user_profile
+	user_profile,
+
+	send_friend_request,
+	accept_friend_request,
+	reject_friend_request,
+	block_friend_request,
 )
 
 
@@ -45,5 +50,10 @@ urlpatterns = [
     path('post_dislike/<int:pk>/', post_dislike, name='post_dislike'),
     path('post_share/<int:pk>/', post_share, name='post_share'),
 
+
+	path('send_friend_request/<int:pk>/', send_friend_request, name='send_friend_request'),
+	path('accept_friend_request/<int:pk>/', accept_friend_request, name='accept_friend_request'),
+	path('reject_friend_request/<int:pk>/', reject_friend_request, name='reject_friend_request'),
+	path('block_friend_request/<int:pk>/', block_friend_request, name='block_friend_request'),
     path('', home, name='home'),
 ]

@@ -16,6 +16,35 @@
 			</div>
 		</div>
 		<div class="col-lg-6 uk-padding-medium uk-margin-medium-top">
+		{% if search_posts %}
+			<span class="uk-text-meta">We have found {{posts.count}} Results</span>
+			{% for post in posts %}
+				<div class="uk-card uk-card-default uk-width-1-1@m uk-margin">
+				    <div class="uk-card-header">
+				        <div class="uk-grid-small uk-flex-middle" uk-grid>
+				            <div class="uk-width-auto">
+				                <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">
+				            </div>
+				            <div class="uk-width-expand">
+				                <h3 class="uk-card-title uk-margin-remove-bottom">{{post.title}}</h3>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="uk-card-body">
+				        <p>{{post.text|truncatechars:30 }}</p>
+				    </div>
+				    <div class="uk-card-footer">
+				       <span>{{post.views}} views</span>
+				       <span>{{post.post_likes.count}} likes</span>
+				       <span>{{post.post_comments.count}} comments</span>
+				       <span>{{post.post_shares.count}} Shares</span>
+				    </div>
+				    <div class="uk-card-footer">
+				        <a href="{% url 'post_details' post.pk %}" class="uk-button uk-button-text">Read more</a>
+				    </div>
+				</div>
+			{% endfor %}			
+		{% else %}
 		{% for post in posts %}
 			<div class="uk-card uk-card-default uk-width-1-1@m uk-margin">
 			    <div class="uk-card-header">
@@ -42,6 +71,7 @@
 			    </div>
 			</div>
 		{% endfor %}
+		{% endif %}
 		</div>
 		<div class="col-lg-3 uk-padding-medium">
 			<div class="uk-padding-medium">
@@ -49,7 +79,21 @@
 			</div>
 			{% for user in users %}
 				<div class="uk-margin-medium-top">
-					<a href="">{{user}}</a>
+					<div class="uk-card uk-card-default uk-width-1-1@m">
+					    <div class="uk-card-header">
+					        <div class="uk-grid-small uk-flex-middle" uk-grid>
+					            <div class="uk-width-auto">
+					                <img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">
+					            </div>
+					            <div class="uk-width-expand">
+					                <h5 class="uk-margin-remove-bottom">{{user}}</h5>
+					                <p class="uk-text-meta uk-margin-remove-top">
+					                	<a href="{% url 'send_friend_request' user.pk %}">send request</a>
+					                </p>
+					            </div>
+					        </div>
+					    </div>
+					</div>
 				</div>
 			{% endfor %}
 		</div>

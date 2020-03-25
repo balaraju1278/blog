@@ -1,18 +1,79 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, HttpResponseServerError
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sessions.models import Session
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-from blog.models import Post,UserProfile,PostLike,PostComment,PostShare
+from blog.models import Post,UserProfile,PostLike,PostComment,PostShare,Friendship
 
+# @csrf_exempt
+# def node_server_api(request):
+# 	try:
+# 		session = Session.objects.get(
+# 			session_key=request.POST.get('sessionid')
+# 		)
+# 		user_id = session.get_decoded().get('_auth_user_id')
+# 		user = User.objects.get(id=user_id)
+
+# 		# creating comment
 
 def home(request):
+	data = request.GET.get('search_item')
+	print(data)
 	context_data = dict()
-	context_data['posts'] = Post.objects.all()
 	if request.user.is_authenticated:
-		context_data['users'] = UserProfile.objects.all()[:10]
+		if data is None:
+			context_data['posts'] = Post.objects.all()
+		else:
+			context_data['posts'] = Post.objects.filter(
+				Q(text__icontains=data) | Q(title__icontains=data)
+			)
+			context_data['search_posts'] = True
+		# request_users = Friendship.objects.filter(request_from=request.user)
+		# context_data['users'] = UserProfile.objects.exclude(user=request.user, user__request_from=request.user)[:10]
 	return render(request, 'home.html', context_data)
 
+
+@login_required
+def send_friend_request(request, pk):
+	request_to_user_profile = UserProfile.objects.get(pk=pk)
+	request_to_user = request_to_user_profile.user
+	new_friendship = Friendship.objects.create(
+		request_from=request.user,
+		request_to=request_to_user
+	)
+	return redirect('home')
+
+
+
+@login_required
+def accept_friend_request(request,pk):
+	frienship_request = Friendship.objects.get(pk=pk)
+	frienship_request.is_accepted = True
+	frienship_request.save()
+	return redirect('home')
+
+
+@login_required
+def reject_friend_request(request, pk):
+	frienship_request = Friendship.objects.get(pk=pk)
+	frienship_request.delete()
+	return redirect('home')
+
+
+@login_required
+def block_friend_request(request, pk):
+	frienship_request = Friendship.objects.get(pk=pk)
+	frienship_request.is_blocked = True
+	frienship_request.save()
+	return redirect('home')
+
+
+@csrf_exempt
 @login_required
 def post_details(request, pk):
 	context_data = dict()
@@ -32,6 +93,22 @@ def post_details(request, pk):
 		context_data['post_liked'] = True
 
 	if request.method == 'POST':
+		# try:
+		# 	session = Session.objects.get(
+		# 		session_key=request.POST.get('sessionid')
+		# 	)
+		# 	user_id = Session.get_decoded().get('_auth_user_id')
+		# 	user = User.objects.get(id=user_id)
+		# 	PostComment.objects.create(
+		# 		post=post,
+		# 		user=user,
+		# 		comment=request.POST.get('comment')
+		# 	)
+		# 	r = redis.StrictRedis(host='localhost', port=6379, db=0)
+		# 	r.publish('comment', user=user.username+':'+request.POST.get('comment'))
+		# 	return HttpResponse("Ok")
+		# except Exception, e:
+		# 	return HttpResponseServerError(str(e))
 		comment_text = request.POST.get('comment_text')
 		comment = PostComment.objects.create(
 			post=post,

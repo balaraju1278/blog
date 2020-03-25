@@ -1,4 +1,34 @@
 {% extends 'base.html' %}
+{% block extra_code %}
+	$(document).ready(function(){
+	var socket = io.connect('localhost', {port: 4000});
+
+	socket.io('connect', function(){
+		console.log("connected");
+	});
+	var entry_el = $("#comment");
+	socket.on('message', function(message){
+	var data = message.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        
+        //Append message to the bottom of the list
+        $('#comments').append('<li>' + data + '</li>');
+        window.scrollBy(0, 10000000000);
+        entry_el.focus();
+    });
+    entry_el.keypress(function(event){
+	 if(event.keyCode != 13) return;
+	        var msg = entry_el.attr('value');
+	        if(msg){
+	           socket.emit('send_message', msg, function(data){
+	                console.log(data);
+	           });
+	        
+	        //Clear input value   
+	        entry_el.attr('value', '');
+	       }
+	});
+});
+{% endblock %}
 {% block inner_content %}
 <div class="contianer">
 	<div class="row">
@@ -53,9 +83,12 @@
 					</div>
 					<hr>
 					<div class="uk-margin-small-top">
-						{% for comment in post.post_comments.all %}
-							<p>{{comment.comment_text}}-{{comment.user.username}}</p>
-						{% endfor %}
+						<ul id="comments">
+							{% for comment in post.post_comments.all %}
+								<li>{{comment.comment_text}}-{{comment.user.username}}</li>
+							{% endfor %}
+						</ul>
+						<input type="text" name="comment" id="comment">
 					</div>
 				{% endif %}
 			</div>

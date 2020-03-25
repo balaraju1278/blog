@@ -51,3 +51,14 @@ class UserProfile(models.Model):
 
 	def __str__(self):
 		return str(self.user)
+
+
+class Friendship(models.Model):
+	request_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_from')
+	request_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_to')
+	is_accepted = models.BooleanField(default=False)
+	is_blocked = models.BooleanField(default=False)
+	is_rejected = models.BooleanField(default=False)
+
+	def __str__(self):
+		return '{}--- {}'.format(str(self.request_from), str(self.request_to))
