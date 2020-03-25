@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block inner_content %}
+<div class="contianer uk-margin-medium-top">
+	<div class="row">
+		<div class="col-lg-12 text-center uk-padding-medium">
+			<ul class="uk-list">
+				{% for notification in notifications %}
+			    <li 
+			    	class="{% if notification.is_seen%}
+			    				uk-background-muted
+			    			{% else %}
+			    				uk-background-default
+			    			{%endif%}">
+			    	{{notification.text}}
+			    </li>
+			    {% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

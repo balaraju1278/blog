@@ -8,7 +8,7 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from blog.models import Post,UserProfile,PostLike,PostComment,PostShare,Friendship
+from blog.models import Post,UserProfile,PostLike,PostComment,PostShare,Friendship,Notification
 
 # @csrf_exempt
 # def node_server_api(request):
@@ -26,8 +26,12 @@ def home(request):
 	print(data)
 	context_data = dict()
 	if request.user.is_authenticated:
+		context_data['notifications'] = Notification.objects.filter(
+			notification_user=request.user,
+			is_seen=False
+		)
 		if data is None:
-			context_data['posts'] = Post.objects.all()
+			context_data['posts'] = Post.objects.all().order_by('-created_at')
 		else:
 			context_data['posts'] = Post.objects.filter(
 				Q(text__icontains=data) | Q(title__icontains=data)
@@ -115,6 +119,14 @@ def post_details(request, pk):
 			user=request.user,
 			comment_text=comment_text
 		)
+		if post.user != request.user:
+			print(post.title)
+			print(post.text)
+			print(post.user)
+			notification = Notification.objects.create(
+				text = 'You have new comment for {}'.format(post.title),
+				notification_user=post.user
+			)
 		return redirect('post_details', pk=post.id)		
 	return render(request, 'post_details.html', context_data)
 
@@ -131,6 +143,11 @@ def post_like(request, pk):
 		user=request.user,
 		post=post
 	)
+	if post.user != request.user:
+		notification = Notification.objects.create(
+			text = 'You have new Like for {}'.format(post.title),
+			notification_user=post.user
+		)
 	return redirect('post_details', pk=post.id)
 
 
@@ -243,3 +260,13 @@ def user_profile(request):
 		user_profile.save()
 		return redirect('user_dashboard')
 	return render(request, 'user_profile.html')
+
+
+@login_required
+def user_notifications(request):
+	context_data = dict()
+	context_data['notifications'] = Notification.objects.filter(
+		notification_user=request.user,
+	)
+	Notification.objects.filter(notification_user=request.user).update(is_seen=True)
+	return render(request, 'user_notifications.html', context_data)

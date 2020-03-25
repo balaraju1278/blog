@@ -10,8 +10,26 @@
     					<img src="https://i.ya-webdesign.com/images/user-avatar-png-7.png" width="100" alt=""></a></li>
 				</ul>
 			</div>
-			<div class="uk-margin-small-top uk-margin-medium-left">
-				<h5>{{request.user.username}}</h5>
+			<div class="uk-margin-small-top uk-margin-medium-left text-left">
+				
+				<ul class="uk-list uk-list-divider">
+				    <li>{{request.user.username}}</li>
+				    <li>
+				    	<a href="{% url 'user_notifications' %}">
+					    	Notifications 
+					    	{% if notifications %}
+					    	<span class="uk-badge">{{notifications.count}}</span>
+					    	{% endif %}
+					    </a>
+				    </li>
+				    	
+				    <li>Messages</li>
+				    <li>Profile</li>
+				    <li>Pages</li>
+				    <li>Groups</li>
+				    <li></li>
+				</ul>
+
 			</div>
 			</div>
 		</div>

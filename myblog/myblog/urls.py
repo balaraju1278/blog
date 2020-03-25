@@ -29,6 +29,7 @@ from blog.views import (
 	user_dashboard,
 	user_profile,
 
+	user_notifications,
 	send_friend_request,
 	accept_friend_request,
 	reject_friend_request,
@@ -44,6 +45,7 @@ urlpatterns = [
     path('user_login/', user_login, name='user_login'),
     path('user_logout/', user_logout, name='user_logout'),
     path('user_dashboard/', user_dashboard, name='user_dashboard'),
+    path('user-notifications/', user_notifications, name='user_notifications'),
     path('user_profile/', user_profile, name='user_profile'),
     path('post_details/<int:pk>/', post_details, name='post_details'),
     path('post_like/<int:pk>/', post_like, name='post_like'),

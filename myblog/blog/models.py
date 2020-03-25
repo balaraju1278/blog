@@ -15,6 +15,16 @@ class Post(models.Model):
 		return self.title
 
 
+class Notification(models.Model):
+	text = models.TextField()
+	created_at = models.DateTimeField(auto_now_add=True)
+	is_seen = models.BooleanField(default=False)
+	notification_user = models.ForeignKey(User, on_delete=models.CASCADE)
+	
+
+	def __str__(self):
+		return self.text
+
 class PostLike(models.Model):
 	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
